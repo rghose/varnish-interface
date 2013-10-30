@@ -8,7 +8,7 @@ function print_table($data) {
 	$data = preg_replace_callback( '/^(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)$/m', function($matches) use (&$i) {
 			$text[0] = "<a href='javascript:doVarnishExecute(\"auto\",$i);'>Enable varnish probe</a>";
 			$text[1] = "<a href='javascript:doVarnishExecute(\"enable\",$i);'>Force enable</a>";
-			$text[2] = "<a href='javascript:doVarnishExecute(\"disable\",$i);'>Force disable</a>";
+			$text[2] = "<a href='javascript:doVarnishExecute(\"healthy\",$i);'>Force disable</a>";
 			$dropDown[0] = '<div class="btn-group"><button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">';
 			$dropDown[1] = '<span class="caret"></span></button><ul class="dropdown-menu" role="menu"><li>';
 			$dropDown[2] = '</li><li>';
