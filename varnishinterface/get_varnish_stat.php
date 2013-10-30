@@ -116,10 +116,10 @@ function get_varnish_server_info( $address, $service_port ) {
 
 function run_varnishadm( $command, $server, $port ) {
 	$varnishadm = $varnishadm_binary_path;
-	$varnishsec = $varnishadm_secret_path_prefix . $server;
-	if(!file_exists($varnishadm_binary_path) || !file_exists($varnishsec))
+	$varnishsec = $varnish_secret_path_prefix . $server;
+	if(!file_exists($varnish) || !file_exists($varnishsec))
 		return false;
-	$output = shell_exec( "LD_LIBRARY_PATH=$varnishadm_libs_path && $varnishadm_binary_path -T $server:$port -S $varnishsec $command" );
+	$output = shell_exec( "LD_LIBRARY_PATH=$varnishadm_libs_path && $varnishadm -T $server:$port -S $varnishsec $command" );
 
 	print_table($output);
 	return true;
