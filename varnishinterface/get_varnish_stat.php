@@ -10,13 +10,13 @@ function print_table($data) {
 	echo '<table class="table table-condensed"><tbody>';
 	$i=1;
 	$data = preg_replace_callback( '/^(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)$/m', function($matches) use (&$i) {
-			$text[0] = "Enable varnish probe";
-			$text[1] = "Force enable";
-			$text[2] = "Force disable";
+			$text[0] = "<a href='javascript:alert('probe'+$i);'>Enable varnish probe</a>";
+			$text[1] = "<a href='javascript:alert('enable'+$i);'>Force enable</a>";
+			$text[2] = "<a href='javascript:alert('disable'+$i);'>Force disable</a>";
 			$dropDown[0] = '<div class="btn-group"><button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">';
-			$dropDown[1] = '<span class="caret"></span></button><ul class="dropdown-menu" role="menu"><li><a href="#">';
-			$dropDown[2] = '</a></li><li><a href="#">';
-			$dropDown[3] = '</a></li></ul></div>';
+			$dropDown[1] = '<span class="caret"></span></button><ul class="dropdown-menu" role="menu"><li>';
+			$dropDown[2] = '</li><li>';
+			$dropDown[3] = '</li></ul></div>';
 			$finalText = "";
 			switch( $matches[3] ) {
 				case "probe":
@@ -47,7 +47,7 @@ function print_table($data) {
 				default:
 					$statusText = "Status";
 			}
-			return "<tr><td>$matches[1]</td><td>$matches[2]</td><td>$matches[5]</td><td>$statusText</td><td>$finalText</td></tr>";
+			return "<tr><td id='backend$i'>$matches[1]</td><td>$matches[2]</td><td>$matches[5]</td><td>$statusText</td><td>$finalText</td></tr>";
 			}, $data );
 	echo $data;
 	echo '</tbody></table>';
