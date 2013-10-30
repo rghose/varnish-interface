@@ -2,6 +2,8 @@
 
 session_start();
 
+include_once ( 'config.php' );
+
 error_reporting(E_ALL);
 
 function print_table($data) {
@@ -47,14 +49,17 @@ function print_table($data) {
 			}
 			return "<tr><td>$matches[1]</td><td>$matches[2]</td><td>$matches[5]</td><td>$statusText</td><td>$finalText</td></tr>";
 			}, $data );
-	/*$data = preg_replace( array("/Sick/","/Healthy/") , 
-			array("<span class='glyphicon glyphicon-thumbs-down'> Sick</span>", "<span class='glyphicon glyphicon-thumbs-up'> Healthy</span>") , 
-			$data );*/
 	echo $data;
 	echo '</tbody></table>';
 }
 
 function get_varnish_server_info( $address, $service_port ) {
+
+	// Check if the secret file for this ip exists.
+	$varnishsec = $varnish_secret_file_prefix . $address;
+	if(!file_exists($varnishsec)) {
+		return false;
+	}
 
 	$socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
 	if ($socket === false) {
@@ -75,7 +80,7 @@ function get_varnish_server_info( $address, $service_port ) {
 	socket_read($socket, 2048,PHP_NORMAL_READ);
 	socket_read($socket, 2048,PHP_NORMAL_READ);
 
-	exec ( "/bin/varnish_auth.bin /etc/varnish_secret_$address $challenge", $output );
+	exec ( "/bin/varnish_auth.bin $varnishsec  $challenge", $output );
 
 	#echo "== Sending auth data\n";
 	$data = "auth $output[0]\n";
@@ -110,18 +115,19 @@ function get_varnish_server_info( $address, $service_port ) {
 }
 
 function run_varnishadm( $command, $server, $port ) {
-	$varnishadm_binary_path = "/opt/varnish/varnishadm";
-	if(!file_exists($varnishadm_binary_path))
+	$varnishadm = $varnishadm_binary_path;
+	$varnishsec = $varnishadm_secret_path_prefix . $server;
+	if(!file_exists($varnishadm_binary_path) || !file_exists($varnishsec))
 		return false;
-	$output = shell_exec( "LD_LIBRARY_PATH=/opt/varnish/LIBS && $varnishadm_binary_path -T $server:$port -S /etc/varnish_secret_$server $command" );
+	$output = shell_exec( "LD_LIBRARY_PATH=$varnishadm_libs_path && $varnishadm_binary_path -T $server:$port -S $varnishsec $command" );
 
 	print_table($output);
 	return true;
 }
 
 
-$ip = "0.0.0.0";
-$port = "2000";
+$ip = $varnishadm_default_ip;
+$port = $varnishadm_default_port;
 
 if (!isset( $_GET['ip'])  ) {
 	echo 'No server specified.';
