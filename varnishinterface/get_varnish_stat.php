@@ -123,7 +123,7 @@ function run_varnishadm( $command, $server, $port ) {
 
 	$varnishadm = $varnishadm_binary_path;
 	$varnishsec = $varnish_secret_path_prefix . $server;
-	if(!file_exists($varnish) || !file_exists($varnishsec))
+	if(!file_exists($varnishadm) || !file_exists($varnishsec))
 		return false;
 	$output = shell_exec( "LD_LIBRARY_PATH=$varnishadm_libs_path && $varnishadm -T $server:$port -S $varnishsec $command" );
 
