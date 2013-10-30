@@ -126,7 +126,7 @@ function run_varnishadm( $command, $server, $port ) {
 }
 
 
-$ip = $varnishadm_default_ip;
+$ip 	= $varnishadm_default_ip;
 $port = $varnishadm_default_port;
 
 if (!isset( $_GET['ip'])  ) {
