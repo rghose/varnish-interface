@@ -10,9 +10,10 @@ function print_table($data) {
 	echo '<table class="table table-condensed"><tbody>';
 	$i=1;
 	$data = preg_replace_callback( '/^(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)$/m', function($matches) use (&$i) {
-			$text[0] = "<a href='javascript:alert('probe'+$i);'>Enable varnish probe</a>";
-			$text[1] = "<a href='javascript:alert('enable'+$i);'>Force enable</a>";
-			$text[2] = "<a href='javascript:alert('disable'+$i);'>Force disable</a>";
+			$text[0] = "<a href='javascript:alert(\"probe\"+\"$i\");'>Enable varnish probe</a>";
+			$text[1] = "<a href='javascript:alert(\"enable\"+\"$i\");'>Force enable</a>";
+			$text[2] = "<a href='javascript:alert(\"disable\"+\"$i\");'>Force disable</a>";
+			$i++;
 			$dropDown[0] = '<div class="btn-group"><button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">';
 			$dropDown[1] = '<span class="caret"></span></button><ul class="dropdown-menu" role="menu"><li>';
 			$dropDown[2] = '</li><li>';
