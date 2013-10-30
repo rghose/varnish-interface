@@ -55,6 +55,8 @@ function print_table($data) {
 
 function get_varnish_server_info( $address, $service_port ) {
 
+	global $varnish_secret_file_prefix;
+	
 	// Check if the secret file for this ip exists.
 	$varnishsec = $varnish_secret_file_prefix . $address;
 	if(!file_exists($varnishsec)) {
@@ -115,6 +117,10 @@ function get_varnish_server_info( $address, $service_port ) {
 }
 
 function run_varnishadm( $command, $server, $port ) {
+	global $varnishadm_binary_path;
+	global $varnish_secret_path_prefix;
+	global $varnishadm_libs_path;
+
 	$varnishadm = $varnishadm_binary_path;
 	$varnishsec = $varnish_secret_path_prefix . $server;
 	if(!file_exists($varnish) || !file_exists($varnishsec))
