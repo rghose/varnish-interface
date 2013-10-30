@@ -3,56 +3,9 @@
 session_start();
 
 include_once ( 'config.php' );
+include_once ( 'common.php' );
 
 error_reporting(E_ALL);
-
-function print_table($data) {
-	echo '<table class="table table-condensed"><tbody>';
-	$i=1;
-	$data = preg_replace_callback( '/^(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)$/m', function($matches) use (&$i) {
-			$text[0] = "<a href='javascript:alert(\"probe\"+\"$i\");'>Enable varnish probe</a>";
-			$text[1] = "<a href='javascript:alert(\"enable\"+\"$i\");'>Force enable</a>";
-			$text[2] = "<a href='javascript:alert(\"disable\"+\"$i\");'>Force disable</a>";
-			$i++;
-			$dropDown[0] = '<div class="btn-group"><button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">';
-			$dropDown[1] = '<span class="caret"></span></button><ul class="dropdown-menu" role="menu"><li>';
-			$dropDown[2] = '</li><li>';
-			$dropDown[3] = '</li></ul></div>';
-			$finalText = "";
-			switch( $matches[3] ) {
-				case "probe":
-					$finalText = $dropDown[0] . "Varnish probe enabled" . $dropDown[1] . $text[2] . $dropDown[2] . $text[1] . $dropDown[3];
-					break;
-				case "sick":
-					$finalText = $dropDown[0] . "Forcibly disabled" . $dropDown[1] . $text[0] . $dropDown[2] . $text[1] . $dropDown[3];
-                                        break;
-				case "healthy":
-					$finalText = $dropDown[0] . "Forcibly enabled" . $dropDown[1] . $text[0] . $dropDown[2] . $text[2] . $dropDown[3];
-                                        break;
-				default:
-					// this is for the heading
-					$finalText = "Enable / Disable";
-			}
-
-			$statusText = "";
-			$stText[0] = '<span class="glyphicon glyphicon-thumbs-';
-			$stText[1] = '"> ';
-			$stText[2] = '</span>';
-			switch( $matches[4] ) {
-				case "Healthy":
-					$statusText = $stText[0] . 'up' . $stText[1] . 'Healthy' . $stText[2];
-					break;
-				case "Sick":
-					$statusText = $stText[0] . 'down' . $stText[1] . 'Sick' . $stText[2];
-                                        break;
-				default:
-					$statusText = "Status";
-			}
-			return "<tr><td id='backend$i'>$matches[1]</td><td>$matches[2]</td><td>$matches[5]</td><td>$statusText</td><td>$finalText</td></tr>";
-			}, $data );
-	echo $data;
-	echo '</tbody></table>';
-}
 
 function get_varnish_server_info( $address, $service_port ) {
 
@@ -117,22 +70,6 @@ function get_varnish_server_info( $address, $service_port ) {
 	print_table($received);
 }
 
-function run_varnishadm( $command, $server, $port ) {
-	global $varnishadm_binary_path;
-	global $varnish_secret_path_prefix;
-	global $varnishadm_libs_path;
-
-	$varnishadm = $varnishadm_binary_path;
-	$varnishsec = $varnish_secret_path_prefix . $server;
-	if(!file_exists($varnishadm) || !file_exists($varnishsec))
-		return false;
-	$output = shell_exec( "LD_LIBRARY_PATH=$varnishadm_libs_path && $varnishadm -T $server:$port -S $varnishsec $command" );
-
-	print_table($output);
-	return true;
-}
-
-
 $ip 	= $varnishadm_default_ip;
 $port = $varnishadm_default_port;
 
@@ -140,15 +77,26 @@ if (!isset( $_GET['ip'])  ) {
 	echo 'No server specified.';
 	exit(0);
 }
-else $ip = $_GET['ip'];
+else {
+	$ip = $_GET['ip'];
+	$_SESSION['ip'] = $ip;
+}
 
 if( !isset( $_GET['port'] ) || strlen($_GET['port'])==0 ) {
 	echo 'No port specified, using default';
-} else $port = $_GET['port'];
+} 
+else {
+	$port = $_GET['port'];
+	$_SESSION['port']=$port;
+}
 
-if( !run_varnishadm( "backend.list", "$ip", "$port" )) {
+$retVal=run_varnishadm( "backend.list", "$ip", "$port" );
+
+if( false == $retVal ) {
 	// Use this as a failsave.
 	get_varnish_server_info("$ip", "$port" );
 }
+else
+	print_table($retVal);
 
 ?>

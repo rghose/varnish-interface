@@ -29,6 +29,12 @@ xmlhttp.onreadystatechange=function()
 xmlhttp.open("GET",url,true);
 xmlhttp.send();
 }
+function doVarnishExecute(action, serverId) {
+	var servName = document.getElementById("backend"+serverId).innerHTML;
+	if(confirm( 'Are you sure you want to apply ' + action + ' to ' + servName + '?' )) {
+		loadAjax("./set_server.php?action="+action+"&server="+servName,"status"+serverId);
+	}
+}
 </script>
 
 <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
