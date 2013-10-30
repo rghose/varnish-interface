@@ -7,9 +7,9 @@ function print_table($data) {
 	$i=0;
 	$data = preg_replace_callback( '/^(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)$/m', function($matches) use (&$i) {
 			$text[0] = "<a href='javascript:doVarnishExecute(\"auto\",$i);'>Enable varnish probe</a>";
-			$text[1] = "<a href='javascript:doVarnishExecute(\"enable\",$i);'>Force enable</a>";
+			$text[1] = "<a href='javascript:doVarnishExecute(\"sick\",$i);'>Force enable</a>";
 			$text[2] = "<a href='javascript:doVarnishExecute(\"healthy\",$i);'>Force disable</a>";
-			$dropDown[0] = '<div class="btn-group"><button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">';
+			$dropDown[0] = "<div id='varnishExecButton$i' class='btn-group'><button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown'>";
 			$dropDown[1] = '<span class="caret"></span></button><ul class="dropdown-menu" role="menu"><li>';
 			$dropDown[2] = '</li><li>';
 			$dropDown[3] = "</li></ul><div id='status$i'></div></div>";
@@ -60,7 +60,7 @@ function run_varnishadm( $command, $server, $port ) {
 	$varnishsec = $varnish_secret_path_prefix . $server;
 	if(!file_exists($varnishadm) || !file_exists($varnishsec))
 		return false;
-	$output = shell_exec( "LD_LIBRARY_PATH=$varnishadm_libs_path && $varnishadm -T $server:$port -S $varnishsec $command" );
+	$output = shell_exec( "export LD_LIBRARY_PATH=$varnishadm_libs_path && $varnishadm -T $server:$port -S $varnishsec $command" );
 
 	return $output;
 }
