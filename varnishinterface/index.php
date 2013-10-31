@@ -26,11 +26,11 @@ xmlhttp.onreadystatechange=function()
   document.getElementById(divContainer).innerHTML = status; 
   if (xmlhttp.readyState==4 && xmlhttp.status==200)
 	{
-			if(xmlhttp.responseText.substring(0,8)=="<script>") {
+			/*if(xmlhttp.responseText.substring(0,8)=="<script>") {
 					//l = xmlhttp.responseText.length;
-					document.head.append(xmlhttp.responseText);
+					document.head.appendChild(xmlhttp.responseText);
 					//eval(xmlhttp.responseText.substring(8,l-9));			}
-			else
+			else*/
 					document.getElementById(divContainer).innerHTML=xmlhttp.responseText;
 	}
   }
@@ -40,9 +40,9 @@ xmlhttp.send();
 function doVarnishExecute(action, serverId) {
 	var servName = document.getElementById("backend"+serverId).innerHTML;
 	if(confirm( 'Are you sure you want to apply ' + action + ' to ' + servName + '?' )) {
-		loadAjax("./set_server.php?action="+action+"&server="+servName,"status"+serverId);
+		loadAjax("./set_server.php?action="+action+"&server="+servName+"&c="+serverId,"status"+serverId);
 	}
-	removeElement(document.getElementById('varnishExecButton'+serverId));
+//	removeElement(document.getElementById('varnishExecButton'+serverId));
 }
 </script>
 

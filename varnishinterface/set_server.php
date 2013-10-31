@@ -4,6 +4,12 @@
 	include_once ( 'config.php');
 	include_once ( 'common.php');
 
+	if( !isset( $_GET['action']) || !isset($_GET['server']) ) {
+		echo "So server / action specified, cannot continue.";
+		exit(0);
+	}
+	
+	$c = $_GET['c'];
 	$action=$_GET['action'];
 	$server=$_GET['server'];
 
@@ -29,5 +35,12 @@
 	if(false==($retVal=run_varnishadm( "$runString", "$ip", "$port" ))) {
 		echo "<div class='glyphicon glyphicon-exclamation-sign'>$retVal</div>";
 	}
-	else echo "<div class='glyphicon glyphicon-ok>Done!</div>'";
+	else {
+		// worked fine, so display the relevant button.
+		if( 0 != strlen($c) ) {
+			$buttonText = button_text($action, $c);
+			echo "$buttonText";
+		}
+		else echo "<div class='glyphicon glyphicon-ok'> Set as $action</div>";
+	}
 ?>
