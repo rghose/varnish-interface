@@ -41,10 +41,10 @@ function print_table($data) {
 		$stText[2] = '</span>';
 		switch( $matches[4] ) {
 			case "Healthy":
-				$statusText = $stText[0] . 'up' . $stText[1] . 'Healthy' . $stText[2];
+				$statusText = $stText[0] . 'up' . $stText[1] . '<span class="label label-success">Healthy</span>' . $stText[2];
 				break;
 			case "Sick":
-				$statusText = $stText[0] . 'down' . $stText[1] . 'Sick' . $stText[2];
+				$statusText = $stText[0] . 'down' . $stText[1] . '<span class="label label-danger">Sick</span>' . $stText[2];
 				break;
 			default:
 				$statusText = "Status";
