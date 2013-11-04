@@ -1,6 +1,7 @@
 <?php
 	session_start();
 ?>
+<!DOCTYPE html>
 <html>
 <head>
 <title>Varnish Interface manager</title>
@@ -20,7 +21,7 @@ function loadFile(fileInput,uploadBtnId) {
 	};
 	r.readAsBinaryString(fileInput.files[0]);
 }
-function mAddNewServer() {
+function mAddNewServer(destDivId) {
 	var text = document.getElementById('idNewServer');
 	if(!ValidateIPaddress(text.value)) {
 		alert("Please correct the IP Address entered.");
@@ -36,7 +37,8 @@ function mAddNewServer() {
 		xhr.open("POST", url, true);
 		xhr.onreadystatechange = function() {
 			if (xhr.readyState === 4) {
-				//alert(xhr.responseText);
+				document.getElementById(destDivId).innerHTML = xhr.responseText;
+				loadServers();
 			}
 		};
 		var contentType = "multipart/form-data; boundary=" + boundary;
@@ -61,9 +63,11 @@ function mAddNewServer() {
 	include_once('config.php');
 ?> 
 <div class='container'>
-<div class="panel panel-default">
+<div class="panel panel-info">
 <div class="panel-heading">Add a new varnish server</div>
 <div class="panel-body">
+<div id='infoUpload'>
+</div>
 <form class="form-inline" role="form" id='frmNewServer'>
 <div class='form-group'>
 	<input class='form-control' type="text"  placeholder='Enter ip address of new server' name="idNewServer" id='idNewServer' />
@@ -76,7 +80,7 @@ function mAddNewServer() {
 	</span>
 </div>
 <div class='form-group'>
-	<input type='button' style="display: none"  id="submitData" class='btn' onclick='mAddNewServer();' value='Add new'/>
+	<input type='button' id="submitData" class='btn'  onclick="mAddNewServer('infoUpload');" value='Add new'/>
 </div>
 </form>
 </div>
