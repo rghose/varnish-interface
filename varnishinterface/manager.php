@@ -10,60 +10,42 @@
 function loadServers() {
 	loadAjax('get_varnish_servers.php','vmgmtdata');
 }
-
-function buildMessage(elements, boundary) {
-	var CRLF = "\r\n";
-	var parts = [];
-	elements.forEach(function(element, index, all) {
-			var part = "";
-			var type = "TEXT";
-			if (element.nodeName.toUpperCase() === "INPUT") {
-			type = element.getAttribute("type").toUpperCase();
-			}
-			if (type === "FILE" && element.files.length > 0) {
-			var fieldName = element.name;
-			var fileName = element.files[0].fileName;
-			part += 'Content-Disposition: form-data; ';
-			part += 'name="' + fieldName + '"; ';
-			part += 'filename="'+ fileName + '"' + CRLF;
-			part += "Content-Type: application/octet-stream";
-			part += CRLF + CRLF;
-			part += element.files[0].getAsBinary() + CRLF;
-			} else {
-				part += 'Content-Disposition: form-data; ';
-				part += 'name="' + element.name + '"' + CRLF + CRLF;
-				part += element.value + CRLF;
-			}
-			parts.push(part);
-	});
-	var request = "--" + boundary + CRLF;
-	request+= parts.join("--" + boundary + CRLF);
-	request+= "--" + boundary + "--" + CRLF;
-	return request;
-}
-function generateBoundary() {
-	return "AJAX-----------------------" + (new Date).getTime();
+function loadFile(fileInput,uploadBtnId) {
+	document.getElementById('fileNameDivNew').innerHTML=fileInput.value;
+	hidediv(uploadBtnId);
+	var r = new FileReader();
+	r.onload = function(evt){ 
+		globalAsyncData=(evt.target.result); 
+		showdiv(uploadBtnId);
+	};
+	r.readAsBinaryString(fileInput.files[0]);
 }
 function mAddNewServer() {
-	var fields=[];
-	var boundary = generateBoundary();
-	fields.push(document.getElementById('idNewServer'));
-	fields.push(document.getElementById('fileuploadNew'));
-	request = buildMessage(fields,boundary);
-	var url = 'add_varnish.php';
-    var xhr = new XMLHttpRequest;
-    xhr.open("POST", url, true);
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4) {
-            alert(xhr.responseText);
-        }
-    };
-    var contentType = "multipart/form-data; boundary=" + boundary;
-    xhr.setRequestHeader("Content-Type", contentType);
-    for (var header in this.headers) {
-        xhr.setRequestHeader(header, headers[header]);
-    }
-    xhr.sendAsBinary(request);
+	var text = document.getElementById('idNewServer');
+	if(!ValidateIPaddress(text.value)) {
+		alert("Please correct the IP Address entered.");
+	}
+	else {
+		var fields=[];
+		var boundary = generateBoundary();
+		fields.push(text);
+		fields.push(document.getElementById('fileuploadNew'));
+		request = buildMessage(fields,boundary);
+		var url = 'add_varnish.php';
+		var xhr = new XMLHttpRequest;
+		xhr.open("POST", url, true);
+		xhr.onreadystatechange = function() {
+			if (xhr.readyState === 4) {
+				//alert(xhr.responseText);
+			}
+		};
+		var contentType = "multipart/form-data; boundary=" + boundary;
+		xhr.setRequestHeader("Content-Type", contentType);
+		for (var header in this.headers) {
+			xhr.setRequestHeader(header, headers[header]);
+		}
+		xhr.sendAsBinary(request);
+	}
 }
 </script>
 <body onload="loadServers();">
@@ -84,17 +66,17 @@ function mAddNewServer() {
 <div class="panel-body">
 <form class="form-inline" role="form" id='frmNewServer'>
 <div class='form-group'>
-	<input class='form-control' placeholder='Enter ip address of new server' id='idNewServer' />
+	<input class='form-control' type="text"  placeholder='Enter ip address of new server' name="idNewServer" id='idNewServer' />
 </div>
 <div class='form-group'>
 	<span class="btn btn-success fileinput-button">
   <i class="glyphicon glyphicon-plus"></i>
   <label class="label" id="fileNameDivNew">Upload secret file</label>
-  <input onchange="document.getElementById('fileNameDivNew').innerHTML=this.value;" id="fileuploadNew" type="file" />
+  <input onchange="loadFile(this,'submitData');" name="fileuploadNew" id="fileuploadNew" type="file" />
 	</span>
 </div>
 <div class='form-group'>
-	<input type='button' class='btn' onclick='mAddNewServer();' value='Add new'/>
+	<input type='button' style="display: none"  id="submitData" class='btn' onclick='mAddNewServer();' value='Add new'/>
 </div>
 </form>
 </div>
