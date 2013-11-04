@@ -49,6 +49,13 @@ function mAddNewServer(destDivId) {
 		xhr.sendAsBinary(request);
 	}
 }
+function deleteVarnish(rownum) {
+	delIp=document.getElementById("ipAddr"+rownum).innerHTML;
+	if(confirm("Are you sure you want to delete the configuration for "+delIp)) {
+		loadAjax('del_varnish.php?ip='+delIp,'infoUpload');
+		loadServers();
+	}
+}
 </script>
 <body onload="loadServers();">
 <div class="jumbotron">
