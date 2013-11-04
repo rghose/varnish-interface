@@ -3,7 +3,10 @@ var globalAsyncData;
 function removeElement(el) {
 el.parentNode.removeChild(el);
 }
-
+function isVisible(id) {
+	if(document.getElementById(id).style.display == 'block') return true;
+	return false;
+}
 function toggleVdiv(id){
 	if( document.getElementById(id).style.display == 'block' ) hidediv(id);
 	else showdiv(id);
@@ -60,21 +63,22 @@ function doVarnishExecute(action, serverId) {
 		loadAjax("./set_server.php?action="+action+"&server="+servName+"&c="+serverId,"status"+serverId);
 	}
 }
-function buildMessage(elements, boundary) {
+function buildMessage(elements, boundary,mode=1) {
 	var CRLF = "\r\n";
 	var parts = [];
 	elements.forEach(function(element, index, all) {
 			var part = "";
 			var type = "TEXT";
 			type = element.getAttribute("type").toUpperCase();
-			if (type === "FILE" && element.files.length > 0) {
-			var fieldName = element.name;
-			var fileName = element.files[0].fileName;
+			if ((mode == 2 && element.name == "textSecret") || (type === "FILE" && element.files.length > 0)) {
+			var fieldName = (mode==2 ? ('fileuploadNew') : element.name);
+			var fileName = ((mode==2)? ('text') : element.files[0].fileName);
 			part += 'Content-Disposition: form-data; ';
 			part += 'name="' + fieldName + '"; ';
 			part += 'filename="'+ fileName + '"' + CRLF;
 			part += "Content-Type: application/octet-stream";
 			part += CRLF + CRLF;
+			globalAsyncData = document.getElementById('fileData').value;
 			var binary=globalAsyncData;
 			part += binary + CRLF;
 			} else {
@@ -89,4 +93,22 @@ function buildMessage(elements, boundary) {
 	request+= "--" + boundary + "--" + CRLF;
 	return request;
 }
+function doAjaxPost(url,params,areaId) {
+	if(window.XMLHttpRequest) xh = new XMLHttpRequest();
+	else xh = new ActiveXObject("Microsoft.XMLHTTP");
+	xh.open("POST", url, true);
+
+	xh.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	xh.setRequestHeader("Content-length", params.length);
+	xh.setRequestHeader("Connection", "close");
+
+	xh.onreadystatechange = function() {
+		var status = "<br><br><img src='images/loading.gif' alt='Loading...'><br><br><br>";
+		document.getElementById(areaId).innerHTML = status;
+		if(xh.readyState == 4 && xh.status == 200) {
+			document.getElementById(areaId).innerHTML = xh.responseText;
+		}
+	}
+	xh.send(params);
+} 
 
