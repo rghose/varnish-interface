@@ -1,7 +1,9 @@
+<!DOCTYPE html>
 <?php
 	session_start();
+	
+	include_once('config.php');
 ?>
-<!DOCTYPE html>
 <html>
 <head>
 <title>Varnish Interface manager</title>
@@ -58,6 +60,9 @@ function deleteVarnish(rownum) {
 }
 </script>
 <body onload="loadServers();">
+<?php
+	include_once( "header.php" );
+?>
 <div class="jumbotron">
 <div class="container">
 <h1>Varnish interface manager</h1>
@@ -66,15 +71,12 @@ function deleteVarnish(rownum) {
 </div>
 <link href="css/bootstrap.min.css" rel="stylesheet" media="screen"/>
 <link href="css/fupload.css" rel="stylesheet" media="screen"/>
-<?php
-	include_once('config.php');
-?> 
 <div class='container'>
+<div id='infoUpload'>
+</div>
 <div class="panel panel-info">
 <div class="panel-heading">Add a new varnish server</div>
 <div class="panel-body">
-<div id='infoUpload'>
-</div>
 <form class="form-inline" role="form" id='frmNewServer'>
 <div class='form-group'>
 	<input class='form-control' type="text"  placeholder='Enter ip address of new server' name="idNewServer" id='idNewServer' />
@@ -86,7 +88,7 @@ function deleteVarnish(rownum) {
   <input onchange="loadFile(this,'submitData');" name="fileuploadNew" id="fileuploadNew" type="file" />
 	</span>
 </div>
-<div class='form-group'>
+<div class='form-group pull-right'>
 	<input type='button' id="submitData" class='btn'  onclick="mAddNewServer('infoUpload');" value='Add new'/>
 </div>
 </form>

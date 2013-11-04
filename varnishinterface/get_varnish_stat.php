@@ -83,7 +83,7 @@ else {
 }
 
 if( !isset( $_GET['port'] ) || strlen($_GET['port'])==0 ) {
-	echo 'No port specified, using default';
+	echo 'No port specified, using default<br>';
 } 
 else {
 	$port = $_GET['port'];
@@ -94,7 +94,9 @@ $retVal=run_varnishadm( "backend.list", "$ip", "$port" );
 
 if( false == $retVal ) {
 	// Use this as a failsave.
-	get_varnish_server_info("$ip", "$port" );
+	//get_varnish_server_info("$ip", "$port" );
+
+	echo "Looks like something broke. :-/<br>";
 }
 else
 	print_table($retVal);

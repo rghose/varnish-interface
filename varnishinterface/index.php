@@ -6,9 +6,9 @@
 <title>Varnish interface</title>
 </head>
 <body>
-<script src="js/common.js"></script>
-
-<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+<?php
+	include_once( 'header.php' );
+?>
 <div class="jumbotron">
 <div class="container">
 <h1>Varnish Interface</h1>
