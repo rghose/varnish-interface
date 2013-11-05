@@ -11,7 +11,7 @@
 <script src="js/common.js"></script>
 <script>
 function loadServers() {
-	loadAjax('get_varnish_servers.php','vmgmtdata');
+	loadAjax('get_varnish_servers.php?manage','vmgmtdata');
 }
 function loadFile(fileInput,uploadBtnId) {
 	document.getElementById('fileNameDivNew').innerHTML=fileInput.value;

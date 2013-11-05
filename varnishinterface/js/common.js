@@ -111,4 +111,6 @@ function doAjaxPost(url,params,areaId) {
 	}
 	xh.send(params);
 } 
-
+function loadVarnishServers(divId) {
+	loadAjax('get_varnish_servers.php',divId);
+}

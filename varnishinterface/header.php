@@ -9,3 +9,4 @@
 </ul>
 </nav>
 <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+<link href="css/common.css" rel="stylesheet" media="screen">

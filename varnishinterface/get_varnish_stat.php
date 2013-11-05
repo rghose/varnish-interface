@@ -79,6 +79,11 @@ if (!isset( $_GET['ip'])  ) {
 }
 else {
 	$ip = $_GET['ip'];
+	$ip=filter_var($ip, FILTER_VALIDATE_IP);
+	if(!$ip) {
+		echo "Invalid IP address";
+		exit(0);
+	}
 	$_SESSION['ip'] = $ip;
 }
 
