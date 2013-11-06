@@ -1,10 +1,12 @@
 <?php
 	session_start();
 
+	include ( 'config.php' );
+
 	if( !isset($_SESSION['user'] )){
 		
 		if(isset($_POST['username']) && isset($_POST['password'])){
-			$ldap = ldap_connect("172.16.140.34");
+			$ldap = ldap_connect($auth_ad_server);
 
 			$username=$_POST['username'];
 			$password=$_POST['password'];
