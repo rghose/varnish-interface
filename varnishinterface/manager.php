@@ -1,12 +1,17 @@
-<!DOCTYPE html>
 <?php
 	session_start();
-	
+
+if( !isset($_SESSION['user'] ) ) {
+		header( 'Location: ./index.php' );
+		die();
+	}
+
 	include_once('config.php');
 ?>
+<!DOCTYPE html>
 <html>
 <head>
-<title>Varnish Interface manager</title>
+<title>Varnish Administrative Tool</title>
 </head>
 <script src="js/common.js"></script>
 <script>
