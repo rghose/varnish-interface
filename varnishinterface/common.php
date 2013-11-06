@@ -57,18 +57,20 @@ function print_table($data) {
 	echo '</tbody></table>';
 }
 
-function run_varnishadm( $command, $server, $port ) {
+function run_varnishadm( $command, $server, $port, &$output ) {
 	global $varnishadm_binary_path;
 	global $varnish_secret_path_prefix;
 	global $varnishadm_libs_path;
 
 	$varnishadm = $varnishadm_binary_path;
 	$varnishsec = $varnish_secret_path_prefix . $server;
-	if(!file_exists($varnishadm) || !file_exists($varnishsec))
-		return false;
-	$output = shell_exec( "export LD_LIBRARY_PATH=$varnishadm_libs_path && $varnishadm -T $server:$port -S $varnishsec $command" );
+	if(!file_exists($varnishadm))
+		return -1;
+	if(!file_exists($varnishsec))
+		return -2;
+	$output = shell_exec( "export LD_LIBRARY_PATH=$varnishadm_libs_path && $varnishadm -T $server:$port -S $varnishsec $command 2>&1" );
 
-	return $output;
+	return 0;
 }
 
 ?>

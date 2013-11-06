@@ -95,15 +95,22 @@ else {
 	$_SESSION['port']=$port;
 }
 
-$retVal=run_varnishadm( "backend.list", "$ip", "$port" );
+$output="";
+$retVal=run_varnishadm( "backend.list", "$ip", "$port", $output );
 
-if( false == $retVal ) {
+switch($retVal) {
+	case -1:
+		echo "Please install varnishadm (or provide a path in the config)";
+		break;
+	case -2:
+		echo "The secret for this server is missing.<br/>";
+		break;
+	case 0:
+		print_table($output);
+		break;
+	default:
+		echo "Looks like something broke. :-/<br/>$output";
+}
 	// Use this as a failsave.
 	//get_varnish_server_info("$ip", "$port" );
-
-	echo "Looks like something broke. :-/<br>";
-}
-else
-	print_table($retVal);
-
 ?>

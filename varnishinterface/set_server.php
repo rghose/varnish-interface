@@ -32,8 +32,9 @@
 	$runString = "backend.set_health $server $action";
 	// TODO: Can a hostname have 2 commas?
 	$runString = str_replace( array(",," , "("  , ")"  ), array(":"  , "\(" , "\)" ), $runString );	
-	if(false==($retVal=run_varnishadm( "$runString", "$ip", "$port" ))) {
-		echo "<div class='glyphicon glyphicon-exclamation-sign'>$retVal</div>";
+	$output="";
+	if(0!=run_varnishadm( "$runString", "$ip", "$port" ,$output)) {
+		echo "<div class='glyphicon glyphicon-exclamation-sign'>$output</div>";
 	}
 	else {
 		// worked fine, so display the relevant button.
