@@ -29,8 +29,14 @@ function loadFile(fileInput,uploadBtnId) {
 	r.readAsBinaryString(fileInput.files[0]);
 }
 function mAddNewServer(destDivId) {
+	var hostname = document.getElementById('idNewHostname');
+	var cluster = document.getElementById('idClusterName');
 	var text = document.getElementById('idNewServer');
 	var url = 'add_varnish.php';
+	if(hostname.value=="") {
+		alert("Please enter hostname");
+		return; 
+	}
 	if(!ValidateIPaddress(text.value)) {
 		alert("Please correct the IP Address entered.");
 	}
@@ -39,6 +45,8 @@ function mAddNewServer(destDivId) {
 		var boundary = generateBoundary();
 		var mode=1;
 		fields.push(text);
+		fields.push(hostname);
+		fields.push(cluster);
 		if(!isVisible('uploadButton') && isVisible('fileData')) {
 			fields.push(document.getElementById('fileData'));
 			mode=2;
@@ -59,7 +67,6 @@ function mAddNewServer(destDivId) {
 		for (var header in this.headers) {
 			xhr.setRequestHeader(header, headers[header]);
 		}
-		alert(request);
 		xhr.sendAsBinary(request);
 	}
 }
@@ -92,10 +99,16 @@ function deleteVarnish(rownum) {
 </div>
 <div class="panel-body">
 <form class="form-inline" role="form" id='frmNewServer'>
-<div class='form-group col-md-4'>
-	<input class='form-control' type="text"  placeholder='Enter ip address of new server' name="idNewServer" id='idNewServer' />
+<div class='form-group col-md-3'>
+	<input class='form-control' type="text"  placeholder='Enter hostname' name="idNewHostname" id='idNewHostname' />
 </div>
-<div class='form-group col-md-5'>
+<div class='form-group col-md-2'>
+	<input class='form-control' type="text"  placeholder='Enter ip address' name="idNewServer" id='idNewServer' />
+</div>
+<div class='form-group col-md-2'>
+	<input class='form-control' type="text"  placeholder='Cluster name' name="idClusterName" id='idClusterName' />
+</div>
+<div class='form-group col-md-3'>
 	<input id='fileData' class='form-control' name="textSecret" style='display: none;' type='text' placeholder='Paste the secret here.'  />
 	<span id='uploadButton' style='display: block;' class="btn btn-success fileinput-button">
   	<i class="glyphicon glyphicon-plus"></i>
@@ -103,7 +116,7 @@ function deleteVarnish(rownum) {
   	<input onchange="loadFile(this,'submitData');" name="fileuploadNew" id="fileuploadNew" type="file" />
 	</span>
 </div>
-<div class='form-group col-md-3 pull-right'>
+<div class='form-group col-md-2'>
 	<input type='button' id="submitData" class='btn'  onclick="mAddNewServer('infoUpload');" value='Add new'/>
 </div>
 </form>

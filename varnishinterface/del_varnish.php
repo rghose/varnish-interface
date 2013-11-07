@@ -14,7 +14,7 @@
 	
 	if(!$ip) {
 ?>
-<div class="alert alert-error alert-dismissable">
+<div class="alert alert-danger alert-dismissable">
 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 Invalid IP address.
 </div>
@@ -23,9 +23,22 @@ Invalid IP address.
 	}
 	
 	exec( "rm $varnish_secret_path_prefix$ip" );
+	try{
+		$dir = "sqlite:$sqlite_database_path";
+		$dbh  = new PDO($dir) or die("cannot open the database, inform your nearest sysad asap!\n");
+		$query = "create table if not exists main (ip text not null, port integer not null default 2000, hostname text not null, cluster text not null)";
+		$dbh->exec($query);
+		$query="delete from main where ip='$ip'";
+		$dbh->exec($query);
+		$dbh=null;
+	}
+	catch (PDOException $e){
+		echo $e->getMessage();
+	}
+
 ?>
 <div class="alert alert-success alert-dismissable">
 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-File was successfully deleted.
+Server was successfully deleted.
 </div>
 

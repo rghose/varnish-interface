@@ -3,12 +3,24 @@
 
 	include_once('common.php');
 
-	if( !isset($_POST['idNewServer']) || !isset($_FILES['fileuploadNew']) ){
-		echo "something worng";
+	if( !isset($_POST['idNewHostname']) ||  !isset($_POST['idNewServer']) || !isset($_FILES['fileuploadNew']) ){
+?>
+<div class="alert alert-danger alert-dismissable">
+<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+You missed a value.
+</div>
+<?php
 		exit(0);
 	}
 
 	$ip = $_POST['idNewServer'] ;
+	$hostname = $_POST['idNewHostname'];
+	$cluster = $_POST['idClusterName'];
+
+	// if no cluster specified move to own cluster
+	if( strlen($cluster) == 0 ) {
+		$cluster = $hostname;
+	}
 
 	// TODO: Add check for:  valid ip address
 
@@ -52,6 +64,19 @@ Error in moving to destination. <?php echo $_FILES['file_upload']['error']; ?>.
 <?php
 	}
 	else {
+		try{
+			$dir = "sqlite:$sqlite_database_path";
+			$dbh  = new PDO($dir) or die("cannot open the database, inform your nearest sysad asap!\n");
+			$query = "create table if not exists main (ip text not null, port integer not null default 2000, hostname text not null, cluster text not null)";
+			$dbh->exec($query);
+			$query="insert into main (ip,hostname,cluster) values ('$ip','$hostname','$cluster')";
+			$out=$dbh->exec($query);
+			$dbh=null;
+		}
+		catch (PDOException $e){
+			echo $e->getMessage();
+		}
+
 ?>
 <div class="alert alert-success alert-dismissable">
 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>

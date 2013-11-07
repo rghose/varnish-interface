@@ -79,6 +79,7 @@ function buildMessage(elements, boundary,mode=1) {
 			part += "Content-Type: application/octet-stream";
 			part += CRLF + CRLF;
 			globalAsyncData = document.getElementById('fileData').value;
+			if(mode==2) globalAsyncData += "\n";
 			var binary=globalAsyncData;
 			part += binary + CRLF;
 			} else {
