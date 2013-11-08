@@ -25,12 +25,13 @@
 <!-- Nav tabs -->
 <ul class="nav nav-tabs">
 <li><a href="#saved" data-toggle="tab">Servers</a></li>
+<li><a href="#cluster" onclick="loadAjax('clusters.php','cvdataDiv');" data-toggle="tab">Clusters</a></li>
 <li><a href="#custom" data-toggle="tab">Custom</a></li>
 </ul>
 
 <!-- Tab panes -->
 <div class="tab-content">
-<div class="tab-pane in fade active" id="saved">
+<div class="tab-pane in fade active" id="saved" style="padding: 10px;">
 
 <div class="panel panel-default">
 <div class="panel-heading"> 
@@ -43,7 +44,12 @@
 </div>
 </div>
 
-<div class="tab-pane fade" id="custom">
+<div class="tab-pane fade" id="cluster" style="padding: 20px;">
+<div class="container" id="cvdataDiv"></div>
+<div class="container" id="cvDetails"></div>
+</div>
+
+<div class="tab-pane fade" id="custom" style="padding: 20px;">
 <form role="form" class="form-horizontal" action='javascript:void(0);'>
 <input class="form-control" id='ip' placeholder='Enter the IP of varnish server' /><br/>
 <input class="form-control" id='port' placeholder='Enter port (default 2000)' /><br />

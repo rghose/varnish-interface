@@ -47,6 +47,6 @@ a.button.icon {
 }
 a.button.icon span{
 	padding-left: 36px;
-	background: url(images/comp.png) no-repeat 0 -4px;
+	background: url(images/comp.png) no-repeat 0 0;
 }
 

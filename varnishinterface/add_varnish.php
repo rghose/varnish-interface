@@ -14,6 +14,13 @@ You missed a value.
 	}
 
 	$ip = $_POST['idNewServer'] ;
+	$port = $varnishadm_default_port;
+	if( isset($_POST['idPort']) ) {
+		$options = array( 
+			'options' => array ( 'default' => 2000 ), 
+			'flags' => array(FILTER_FLAG_ALLOW_OCTAL,FILTER_FLAG_ALLOW_HEX) );
+		$port = filter_var( $_POST['idPort'], FILTER_VALIDATE_INT, $options);
+	}
 	$hostname = $_POST['idNewHostname'];
 	$cluster = $_POST['idClusterName'];
 
@@ -69,12 +76,12 @@ Error in moving to destination. <?php echo $_FILES['file_upload']['error']; ?>.
 			$dbh  = new PDO($dir) or die("cannot open the database, inform your nearest sysad asap!\n");
 			$query = "create table if not exists main (ip text not null, port integer not null default 2000, hostname text not null, cluster text not null)";
 			$dbh->exec($query);
-			$query="insert into main (ip,hostname,cluster) values ('$ip','$hostname','$cluster')";
+			$query="insert into main (ip,port,hostname,cluster) values ('$ip','$port','$hostname','$cluster')";
 			$out=$dbh->exec($query);
 			$dbh=null;
 		}
 		catch (PDOException $e){
-			echo $e->getMessage();
+			echo $e->getMessage();	// to be removed in prod
 		}
 
 ?>

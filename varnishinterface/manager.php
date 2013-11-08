@@ -99,16 +99,19 @@ function deleteVarnish(rownum) {
 </div>
 <div class="panel-body">
 <form class="form-inline" role="form" id='frmNewServer'>
-<div class='form-group col-md-3'>
+<div class='form-group col-md-2'>
 	<input class='form-control' type="text"  placeholder='Enter hostname' name="idNewHostname" id='idNewHostname' />
 </div>
 <div class='form-group col-md-2'>
 	<input class='form-control' type="text"  placeholder='Enter ip address' name="idNewServer" id='idNewServer' />
 </div>
 <div class='form-group col-md-2'>
+	<input class='form-control' type="text"  placeholder='Port (default 2000)' name="idPort" id='idPort' />
+</div>
+<div class='form-group col-md-2'>
 	<input class='form-control' type="text"  placeholder='Cluster name' name="idClusterName" id='idClusterName' />
 </div>
-<div class='form-group col-md-3'>
+<div class='form-group col-md-2'>
 	<input id='fileData' class='form-control' name="textSecret" style='display: none;' type='text' placeholder='Paste the secret here.'  />
 	<span id='uploadButton' style='display: block;' class="btn btn-success fileinput-button">
   	<i class="glyphicon glyphicon-plus"></i>
