@@ -3,11 +3,11 @@
 include_once( 'config.php' );
 
 
-function button_text($state, $number) {
+function button_text($state, $number, $function_name="doVarnishExecute") {
 	$retVal = "";
-	$text[0] = "<a href='javascript:doVarnishExecute(\"auto\",$number);'>Enable varnish probe</a>";
-	$text[1] = "<a href='javascript:doVarnishExecute(\"healthy\",$number);'>Force enable</a>";
-	$text[2] = "<a href='javascript:doVarnishExecute(\"sick\",$number);'>Force disable</a>";
+	$text[0] = "<a href='javascript:$function_name(\"auto\",$number);'>Enable varnish probe</a>";
+	$text[1] = "<a href='javascript:$function_name(\"healthy\",$number);'>Force enable</a>";
+	$text[2] = "<a href='javascript:$function_name(\"sick\",$number);'>Force disable</a>";
 	$dropDown[0] = "<div id='varnishExecButton$number' class='btn-group'><button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown'>";
 	$dropDown[1] = '<span class="caret"></span></button><ul class="dropdown-menu" role="menu"><li>';
 	$dropDown[2] = '</li><li>';
@@ -30,16 +30,11 @@ function button_text($state, $number) {
 	return $retVal;
 }
 
-function print_table($data) {
-	echo '<table class="table table-condensed"><tbody>';
-	$i=0;
-	$data = preg_replace_callback( '/^(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)$/m', function($matches) use (&$i) {
-		$finalText = button_text($matches[3], $i);
-		$statusText = "";
+function status_text($data) {
 		$stText[0] = '<span class="glyphicon glyphicon-thumbs-';
 		$stText[1] = '"> ';
 		$stText[2] = '</span>';
-		switch( $matches[4] ) {
+		switch( $data ) {
 			case "Healthy":
 				$statusText = $stText[0] . 'up' . $stText[1] . '<span class="label label-success">Healthy</span>' . $stText[2];
 				break;
@@ -49,6 +44,15 @@ function print_table($data) {
 			default:
 				$statusText = "Status";
 		}
+		return $statusText;
+}
+
+function print_table($data) {
+	echo '<table class="table table-condensed"><tbody>';
+	$i=0;
+	$data = preg_replace_callback( '/^(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)$/m', function($matches) use (&$i) {
+		$finalText = button_text($matches[3], $i);
+		$statusText = status_text($matches[4]);
 		$retVal = "<tr><td id='backend$i'>$matches[1]</td><td>$matches[2]</td><td>$matches[5]</td><td>$statusText</td><td><div id='status$i'>$finalText</div></td></tr>";
 		$i++;
 		return $retVal;

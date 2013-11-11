@@ -2,9 +2,10 @@
 	session_start();
 
 	include_once( 'config.php' );
+	include_once( 'common.php' );
 
 	if( !isset($_SESSION['user']) ) {
-		exit(0);
+//		exit(0);
 	}
 
 	$mode=1;
@@ -54,9 +55,68 @@
 		}
 
 		$query = "select ip, port, hostname from main where cluster='$cluster'";
+		$c=0;
+		$handle=array();
+		$servers=array();
 		foreach( $dbh->query($query) as $row ) {
-			echo "$row[ip]:$row[port] is $row[hostname]<br/>";
+			$servers[$c]=$row['ip'];
+			$handle[$c] = popen("php-cgi  -q get_varnish_stat.php ip=$row[ip] port=$row[port] notable",'r');
+			if(!$handle[$c])
+				die("Failed for $row[ip]");
+			// This is needed by set_server.php when it will scan for cluster ips in cluster mode
+			$_SESSION["CLUSTER_$c"]=$row['ip'];
+			$c++;
 		}
+
+		$_SESSION["CLUSTERS"] = $c;
+
+		$data=array();
+		$i=0;
+		$total_lines=0;
+		while($i<$c) {
+			if($handle[$i]) {
+				$total_lines=0;
+				while (!feof($handle[$i])) {
+					$buff = fscanf($handle[$i], "%s %s %s %s %[^\n]s");
+					//list($name, $refs, $action, $status, $probes) = $buff;
+					$data[$servers[$i]][$total_lines++]=$buff;
+				}
+			}
+			pclose($handle[$i++]);
+		} 
+		
+		echo '<table class="table table-condensed"><tbody>';
+		for($i=1;$i<$total_lines-1;$i++) {
+			$finalText="";
+			$statusText="";
+			$acts=array();
+			$health=array();
+			for($j=0;$j<$c;$j++) {
+				$acts[$j]  =$data[$servers[$j]][$i][2];
+				$health[$j]=$data[$servers[$j]][$i][3];
+				$finalText  .= " $acts[$j]";
+				$statusText .= " $health[$j]";
+			}
+
+			$finalText = button_text($acts[0],$i,'vSyncAll');
+			for($j=1;$j<$c;$j++) {
+				if($acts[$j]!=$acts[$j-1]) {
+					$finalText = "Not in sync";
+					break;
+				}
+			}
+			
+			$statusText = status_text($health[0]);
+			for($j=1;$j<$c;$j++) {
+				if($health[$j]!=$health[$j-1]) {
+					$statusText = "Not in sync (or network issue)";
+					break;
+				}
+			}
+//			echo "<tr><td id='backend$i'>$name</td><td>$refs<td><td>$probes</td><td>$statusText</td><td><div id='status$i'>$finalText</div></td></tr>";
+				echo "<tr><td id='backend$i'>" . $data[$servers[0]][$i][0] . "</td><td>$statusText</td><td><div id='status$i'>$finalText</div></td></tr>";
+		}
+		echo '</tbody></table>';
 	
 		$dbh=null;
 	}

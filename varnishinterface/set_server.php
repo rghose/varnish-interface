@@ -28,11 +28,45 @@
 	} else if( isset( $_SESSION['port'] ))
 		$port = $_SESSION['port'];
 
+	$output="";
+
+	if( isset($_GET['cluster']) && isset($_SESSION['CLUSTERS']) ) {
+		$n = $_SESSION["CLUSTERS"];
+		$dirty=0;
+		$bad_servers=array();
+		for($i=0;$i<$n;$i++) {
+			if(!isset($_SESSION["CLUSTER_$i"]))
+				die("Invalid data");
+			
+			$ip=$_SESSION["CLUSTER_$i"];
+			//unset($_SESSION["CLUSTER_$i"]);
+
+			// sanitize the server string for varnishadm and bash.
+			$runString = "backend.set_health $server $action";
+			// TODO: Can a hostname have 2 commas?
+			$runString = str_replace( array(",," , "("  , ")"  ), array(":"  , "\(" , "\)" ), $runString );	
+			
+			if( 0!=run_varnishadm("$runString","$ip","$port", $output )) {
+				$bad_servers[$dirty++]=$ip;
+			}
+		}
+		if($dirty>0) {
+			echo "<div class='glyphicon glyphicon-exclamation-sign'>Failed for servers " . print_r($bad_servers) . "</div>";
+			unset($_SESSION["CLUSTERS"]);
+		}
+
+		if(0!=strlen($c)) {
+			$buttonText = button_text($action, $c, 'vSyncAll' );
+			echo "$buttonText";
+		}
+		else echo "<div class='glyphicon glyphicon-ok'> Set as $action</div>"; 
+		exit(0);
+	}
+
 	// sanitize the server string for varnishadm and bash.
 	$runString = "backend.set_health $server $action";
 	// TODO: Can a hostname have 2 commas?
 	$runString = str_replace( array(",," , "("  , ")"  ), array(":"  , "\(" , "\)" ), $runString );	
-	$output="";
 	if(0!=run_varnishadm( "$runString", "$ip", "$port" ,$output)) {
 		echo "<div class='glyphicon glyphicon-exclamation-sign'>$output</div>";
 	}

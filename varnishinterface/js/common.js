@@ -57,6 +57,13 @@ xmlhttp.send();
 function generateBoundary() {
 	return "AJAX-----------------------" + (new Date).getTime();
 }
+function vSyncAll(action,serverId) {
+	var servName = document.getElementById("backend"+serverId).innerHTML;
+	if(confirm( 'Are you sure you want to apply ' + action + ' to ' + servName + '?' )) {
+		loadAjax("./set_server.php?cluster&action="+action+"&server="+servName+"&c="+serverId,"status"+serverId);
+	}
+}
+
 function doVarnishExecute(action, serverId) {
 	var servName = document.getElementById("backend"+serverId).innerHTML;
 	if(confirm( 'Are you sure you want to apply ' + action + ' to ' + servName + '?' )) {

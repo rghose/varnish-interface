@@ -72,6 +72,11 @@ function get_varnish_server_info( $address, $service_port ) {
 
 $ip 	= $varnishadm_default_ip;
 $port = $varnishadm_default_port;
+$noTable = false;
+
+if(isset($_GET['notable'])) {
+	$noTable=true;
+}
 
 if (!isset( $_GET['ip'])  ) {
 	echo 'No server specified.';
@@ -106,7 +111,8 @@ switch($retVal) {
 		echo "The secret for this server is missing.<br/>";
 		break;
 	case 0:
-		print_table($output);
+		if($noTable) echo $output;
+		else print_table($output);
 		break;
 	default:
 		echo "Looks like something broke. :-/<br/>$output";

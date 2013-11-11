@@ -4,6 +4,6 @@
 	$varnish_secret_path_prefix = "/opt/varnish/interface/varnish_secret_";
 	$varnishadm_default_ip			= "0.0.0.0";
 	$varnishadm_default_port		= "2000";
-	$auth_ad_server							= "172.16.140.34";
+	$auth_ad_server							= "";
 	$sqlite_database_path				= "/opt/varnish/db/vdata";
 ?>

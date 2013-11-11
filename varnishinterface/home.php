@@ -45,8 +45,15 @@
 </div>
 
 <div class="tab-pane fade" id="cluster" style="padding: 20px;">
-<div class="container" id="cvdataDiv"></div>
-<div class="container" id="cvDetails"></div>
+
+<div class="panel panel-default">
+<div class="panel-heading"> 
+	<div class="container" id="cvdataDiv"></div>
+</div>
+<div class="panel-body"> 
+	<div class="container" id="cvDetails"></div>
+</div>
+</div>
 </div>
 
 <div class="tab-pane fade" id="custom" style="padding: 20px;">
