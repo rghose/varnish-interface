@@ -122,3 +122,26 @@ function doAjaxPost(url,params,areaId) {
 function loadVarnishServers(divId) {
 	loadAjax('get_varnish_servers.php',divId);
 }
+function editText(key,cn,mode){
+	var cm;
+	if(key=="hostname") cm=0;
+	else if(key=="cluster") cm=1;
+	var id1='cspan'+cn+cm;
+	var id2='ctext'+cn+cm;
+	var id3='ctextbtn'+cn+cm;
+	var id4='ctextx'+cn+cm;
+	toggleVdiv(id1);
+	toggleVdiv(id2);
+	toggleVdiv(id3);
+	toggleVdiv(id4);
+	var val1=document.getElementById(id1).innerHTML;
+	var val2=document.getElementById(id2).value;
+	if(isVisible(id1) && mode!=2) { 
+		loadAjax('edit_varnish.php?key='+key+'&v='+val2+'&old='+val1,id1);
+	}
+	else { 
+		document.getElementById(id2).value=val1;
+		document.getElementById(id2).focus();
+		document.getElementById(id2).select();
+	}
+}
