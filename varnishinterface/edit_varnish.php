@@ -14,6 +14,11 @@ $key=addslashes($_GET['key']);
 $val=addslashes($_GET['v']);
 $old=addslashes($_GET['old']);
 
+// no changes, no need for database work
+if( $old == $key ) {
+	die($old);
+}
+
 try{
 	$dir = "sqlite:$sqlite_database_path";
 	$dbh  = new PDO($dir) or die("cannot open the database, inform your nearest sysad asap!\n");
