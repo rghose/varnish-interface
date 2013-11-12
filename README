@@ -6,6 +6,7 @@ We also need varnishadm to be installed on the server, and the secret files of t
 
 Whats new?
 
+* Servers can be edited from management interface
 * Cluster management
 * Uses active directory authentication
 * Varnish interface manager used to add varnish servers' secrets
