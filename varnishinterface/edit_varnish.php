@@ -4,7 +4,7 @@ session_start();
 include_once('config.php');
 
 if(!isset($_SESSION['user'])){
-	die('Please login to continue...');
+	die('Please login to continue.');
 }
 
 if(!isset($_GET['key']) || !isset($_GET['v']) || !isset($_GET['old']) )

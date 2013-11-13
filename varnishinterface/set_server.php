@@ -4,7 +4,11 @@
 	include_once ( 'config.php');
 	include_once ( 'common.php');
 
-	if( !isset( $_GET['action']) || !isset($_GET['server']) ) {
+		if( !isset($_SESSION['user']) ) {
+		die("Please login to continue.");
+	}
+
+if( !isset( $_GET['action']) || !isset($_GET['server']) ) {
 		echo "So server / action specified, cannot continue.";
 		exit(0);
 	}

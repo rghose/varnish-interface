@@ -5,7 +5,7 @@
 	include_once( 'common.php' );
 
 	if( !isset($_SESSION['user']) ) {
-//		exit(0);
+		die("Please login to continue.");
 	}
 
 	$mode=1;

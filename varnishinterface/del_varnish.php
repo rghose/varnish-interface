@@ -3,6 +3,10 @@
 
 	include_once('config.php');
 
+	if( !isset($_SESSION['user']) ) {
+		die("Please login to continue.");
+	}
+
 	if( !isset($_GET['ip'] )){
 		echo "need server ip";
 		exit(0);
