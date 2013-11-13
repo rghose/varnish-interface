@@ -3,6 +3,10 @@
 
 	include_once('common.php');
 
+	if(!isset($_SESSION['user'])){
+		die('Please login to continue.');
+	}
+
 	if( !isset($_POST['idNewHostname']) ||  !isset($_POST['idNewServer']) || !isset($_FILES['fileuploadNew']) ){
 ?>
 <div class="alert alert-danger alert-dismissable">
