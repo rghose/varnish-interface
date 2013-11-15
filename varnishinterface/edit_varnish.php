@@ -4,7 +4,8 @@ session_start();
 include_once('config.php');
 
 if(!isset($_SESSION['user'])){
-	die('Please login to continue.');
+	header( 'Location: ./index.php' );
+	die();
 }
 
 if(!isset($_GET['key']) || !isset($_GET['v']) || !isset($_GET['old']) )

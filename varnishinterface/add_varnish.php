@@ -4,7 +4,8 @@
 	include_once('common.php');
 
 	if(!isset($_SESSION['user'])){
-		die('Please login to continue.');
+		header( 'Location: ./index.php' );
+		die();
 	}
 
 	if( !isset($_POST['idNewHostname']) ||  !isset($_POST['idNewServer']) || !isset($_FILES['fileuploadNew']) ){
