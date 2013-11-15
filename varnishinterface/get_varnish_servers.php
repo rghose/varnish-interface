@@ -70,7 +70,7 @@
 		}
 		else {
 ?>
-			<a class="button" href="javascript:void(0);" onclick="loadAjax('get_varnish_stat.php?ip=<?php echo $row[0];?>&port=<?php echo $row[3];?>','vsdata');" ><span id="ip<?php echo $i;?>">
+			<a class="button" id="btnme<?php echo $i;?>" href="javascript:void(0);" onclick="selectButton('btnme<?php echo $i; ?>');loadAjax('get_varnish_stat.php?ip=<?php echo $row[0];?>&port=<?php echo $row[3];?>','vsdata');" ><span id="ip<?php echo $i;?>">
 <?php
 			echo "$row[1] ($row[0])";
 			echo "</span></a>";

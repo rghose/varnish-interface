@@ -24,6 +24,30 @@ color: #597390;
 			 font-size: 20px;
 			 font-weight: bold;
 }
+a.clickedbutton {
+	background-image: -moz-linear-gradient(top, #a0a0a0, #7a4fe8);
+	background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, #a0a0a0),color-stop(1, #7a4fe8));
+filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#a0a0a0', EndColorStr='#7a4fe8');
+				-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#a0a0a0', EndColorStr='#7a4fe8')";
+border: 1px solid #fff;
+				-moz-box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.4);
+				-webkit-box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.4);
+				box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.4);
+				border-radius: 18px;
+				-webkit-border-radius: 18px;
+				-moz-border-radius: 18px;
+padding: 5px 15px;
+				 text-decoration: none;
+				 text-shadow: #fff 0 1px 0;
+float: left;
+			 margin-right: 15px;
+			 margin-bottom: 15px;
+display: block;
+color: #e7e7e7;
+			 line-height: 24px;
+			 font-size: 20px;
+			 font-weight: bold;
+}
 
 a.button:hover {
 	background-image: -moz-linear-gradient(top, #ffffff, #eeeeee);
@@ -50,6 +74,3 @@ a.button.icon span{
 	background: url(images/comp.png) no-repeat 0 0;
 }
 
-.replaceEditable {
-
-}

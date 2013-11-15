@@ -145,3 +145,10 @@ function editText(key,cn,mode){
 		document.getElementById(id2).select();
 	}
 }
+function selectButton(id) {
+	elements=document.getElementsByClassName('clickedbutton');
+	for( i=0; i<elements.length; i++) {
+		elements[i].className='button';
+	}
+	document.getElementById(id).className="clickedbutton"
+}

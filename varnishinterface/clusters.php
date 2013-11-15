@@ -30,7 +30,7 @@
 		foreach ( $dbh->query($query) as $row ) {
 			if( $mode == 1 ) {
 ?>
-<a class="button" onclick="loadAjax('clusters.php?cluster=<?php echo $row['cluster'];?>','cvDetails');"><span id="cluster<?php echo $i;?>">
+<a href="javascript:void(0);" class="button" onclick="loadAjax('clusters.php?cluster=<?php echo $row['cluster'];?>','cvDetails');"><span id="cluster<?php echo $i;?>">
 <?php print $row['cluster']; ?>
 </span>
 </a>
@@ -79,7 +79,6 @@
 				$total_lines=0;
 				while (!feof($handle[$i])) {
 					$buff = fscanf($handle[$i], "%s %s %s %s %[^\n]s");
-					//list($name, $refs, $action, $status, $probes) = $buff;
 					$data[$servers[$i]][$total_lines++]=$buff;
 				}
 			}
