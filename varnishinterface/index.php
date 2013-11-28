@@ -17,7 +17,7 @@
 			$username=$_POST['username'];
 			$password=$_POST['password'];
 
-			if(strlen($username)==0 || strlen(($password)) {
+			if(strlen($username)==0 || strlen($password)) {
 				$_SESSION['login_error']="Blank credentials are not accepted";
 				header('Location: ./index.php');
 				die('Error : blank username / password');
@@ -53,7 +53,7 @@
 <div class="container">
 <?php
 if(isset($_SESSION['login_error'])){
-	echo "<div style='padding:10px;' class='text-danger text-center'>$_SESSION[login_error]</div>" 
+	echo "<div style='padding:10px;' class='text-danger text-center'>$_SESSION[login_error]</div>"; 
 	unset($_SESSION['login_error']);
 }
 ?>
