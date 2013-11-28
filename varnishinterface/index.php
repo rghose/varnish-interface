@@ -16,6 +16,10 @@
 			$username=$_POST['username'];
 			$password=$_POST['password'];
 
+			if(strlen($username)==0 || strlen(($password)) {
+				$_SESSION['login_error']="Blank credentials are not accepted";
+			}
+
 			if($bind = ldap_bind($ldap, $username, $password)) {
 				$_SESSION['user']=$username;
 				header( 'Location: ./home.php' );
