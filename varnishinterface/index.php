@@ -4,8 +4,13 @@
 	include ( 'config.php' );
 
 	if( !isset($_SESSION['user'] )){
-		
+
 		if(isset($_POST['username']) && isset($_POST['password'])){
+			if(!function_exists('ldap_connect')) {
+				$_SESSION['login_error']="Server not configured correctly. Install LDAP for php.";
+				header('Location: ./home.php');
+			}
+
 			$ldap = ldap_connect($auth_ad_server);
 
 			$username=$_POST['username'];
@@ -14,7 +19,7 @@
 			if($bind = ldap_bind($ldap, $username, $password)) {
 				$_SESSION['user']=$username;
 				header( 'Location: ./home.php' );
-				die('kasjkajskjaksjkas');
+				die('success');
 			} else {
 				$_SESSION['login_error']="Invalid AD credentials";
 			}
@@ -39,6 +44,13 @@
 </div>
 </div>
 <div class="container">
+<?php
+if(isset($_SESSION['login_error'])){
+	echo "<div style='padding:10px;' class='text-danger text-center'>$_SESSION[login_error]</div>" 
+	unset($_SESSION['login_error']);
+}
+?>
+
 <form class="form-horizontal" role="form" action="index.php" method="POST">
 	<div class="form-group">
 		<label for="inputID" class="col-sm-2 control-label">AD Username:</label>
