@@ -8,7 +8,8 @@
 		if(isset($_POST['username']) && isset($_POST['password'])){
 			if(!function_exists('ldap_connect')) {
 				$_SESSION['login_error']="Server not configured correctly. Install LDAP for php.";
-				header('Location: ./home.php');
+				header('Location: ./index.php');
+				die( 'No LDAP for php' );
 			}
 
 			$ldap = ldap_connect($auth_ad_server);
@@ -18,6 +19,8 @@
 
 			if(strlen($username)==0 || strlen(($password)) {
 				$_SESSION['login_error']="Blank credentials are not accepted";
+				header('Location: ./index.php');
+				die('Error : blank username / password');
 			}
 
 			if($bind = ldap_bind($ldap, $username, $password)) {
