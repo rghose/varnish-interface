@@ -81,7 +81,7 @@ class MyCallBack {
 function print_table($data) {
 	echo '<table class="table table-condensed"><tbody>';
 	$i=0;
-	$cb = MyCallBack();
+	$cb = new MyCallBack();
 	$data = preg_replace_callback( '/^(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)$/m', array($cb, 'callback') ,$data );
 	echo $data;
 	echo '</tbody></table>';
