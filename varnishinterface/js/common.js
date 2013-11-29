@@ -72,7 +72,7 @@ function doVarnishExecute(action, serverId) {
 }
 function buildMessage(elements, boundary,mode) {
 	if(mode==undefined)
-		mode=1
+		mode=1;
 	var CRLF = "\r\n";
 	var parts = [];
 	elements.forEach(function(element, index, all) {

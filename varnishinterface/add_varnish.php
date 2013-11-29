@@ -21,10 +21,16 @@ You missed a value.
 	$ip = $_POST['idNewServer'] ;
 	$port = $varnishadm_default_port;
 	if( isset($_POST['idPort']) ) {
-		$options = array( 
-			'options' => array ( 'default' => 2000 ), 
-			'flags' => array(FILTER_FLAG_ALLOW_OCTAL,FILTER_FLAG_ALLOW_HEX) );
-		$port = filter_var( $_POST['idPort'], FILTER_VALIDATE_INT, $options);
+		if(function_exists('filter_var')) {
+			$options = array( 
+					'options' => array ( 'default' => 2000 ), 
+					'flags' => array(FILTER_FLAG_ALLOW_OCTAL,FILTER_FLAG_ALLOW_HEX) );
+			$port = filter_var( $_POST['idPort'], FILTER_VALIDATE_INT, $options);
+		}
+		else {
+			// older php
+			$port=htmlentities(trim($port), ENT_NOQUOTES);
+		}
 	}
 	$hostname = $_POST['idNewHostname'];
 	$cluster = $_POST['idClusterName'];
@@ -34,9 +40,8 @@ You missed a value.
 		$cluster = $hostname;
 	}
 
-	// TODO: Add check for:  valid ip address
-
-	if( ! ($ip=filter_var($ip, FILTER_VALIDATE_IP)) ) {
+	$isValid = validateIP($ip);
+	if( ! $isValid ) {
 ?>
 <div class="alert alert-danger alert-dismissable">
 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
