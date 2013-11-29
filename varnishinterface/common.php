@@ -47,16 +47,42 @@ function status_text($data) {
 		return $statusText;
 }
 
+
+function validateIP($ip) 
+{ 
+    $valid = false; 
+     
+    $regexp = '/^((1?\d{1,2}|2[0-4]\d|25[0-5])\.){3}(1?\d{1,2}|2[0-4]\d|25[0-5])$/'; 
+     
+    if (preg_match($regexp, $ip)) 
+    { 
+        $valid = true; 
+    } 
+     
+    return $valid; 
+}  
+
+class MyCallBack {
+
+	public function __construct() {
+		$this->i = 0;
+  }
+
+	function callback($matches) {
+		$i = $this->i;
+		$finalText = button_text($matches[3], $i);
+    $statusText = status_text($matches[4]);
+    $retVal = "<tr><td id='backend$i'>$matches[1]</td><td>$matches[2]</td><td>$matches[5]</td><td>$statusText</td><td><div id='status$i'>$finalText</div></td></tr>";
+		$this->i++;
+    return $retVal;
+	}
+}
+
 function print_table($data) {
 	echo '<table class="table table-condensed"><tbody>';
 	$i=0;
-	$data = preg_replace_callback( '/^(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)$/m', function($matches) use (&$i) {
-		$finalText = button_text($matches[3], $i);
-		$statusText = status_text($matches[4]);
-		$retVal = "<tr><td id='backend$i'>$matches[1]</td><td>$matches[2]</td><td>$matches[5]</td><td>$statusText</td><td><div id='status$i'>$finalText</div></td></tr>";
-		$i++;
-		return $retVal;
-	}, $data );
+	$cb = MyCallBack();
+	$data = preg_replace_callback( '/^(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)$/m', array($cb, 'callback') ,$data );
 	echo $data;
 	echo '</tbody></table>';
 }
