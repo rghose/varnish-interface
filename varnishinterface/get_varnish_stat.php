@@ -84,8 +84,7 @@ if (!isset( $_GET['ip'])  ) {
 }
 else {
 	$ip = $_GET['ip'];
-	$ip=filter_var($ip, FILTER_VALIDATE_IP);
-	if(!$ip) {
+	if(!validateIP($ip)) {
 		echo "Invalid IP address";
 		exit(0);
 	}
