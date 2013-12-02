@@ -17,7 +17,7 @@
 			$username=$_POST['username'];
 			$password=$_POST['password'];
 
-			if(strlen($username)==0 || strlen($password)) {
+			if(strlen($username)==0 || strlen($password)==0) {
 				$_SESSION['login_error']="Blank credentials are not accepted";
 				header('Location: ./index.php');
 				die('Error : blank username / password');

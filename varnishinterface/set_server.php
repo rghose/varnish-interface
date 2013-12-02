@@ -53,6 +53,11 @@ if( !isset( $_GET['action']) || !isset($_GET['server']) ) {
 			
 			if( 0!=run_varnishadm("$runString","$ip","$port", $output )) {
 				$bad_servers[$dirty++]=$ip;
+			} 
+			else {
+				openlog("VAT",LOG_PID,LOG_USER);
+				syslog(LOG_INFO, "User: $_SESSION[user] set server $server as $action on $ip" );
+				closelog();
 			}
 		}
 		if($dirty>0) {
@@ -77,6 +82,9 @@ if( !isset( $_GET['action']) || !isset($_GET['server']) ) {
 	}
 	else {
 		// worked fine, so display the relevant button.
+		openlog("VAT",LOG_PID,LOG_USER);
+		syslog(LOG_INFO, "User: $_SESSION[user] set server $server as $action on $ip" );
+		closelog();
 		if( 0 != strlen($c) ) {
 			$buttonText = button_text($action, $c);
 			echo "$buttonText";
