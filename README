@@ -1,5 +1,8 @@
 This is a varnish interface.
 
+.. figure:: https://raw.github.com/rghose/varnish-interface/master/
+    :align: center
+
 The config file is needed to be configured in config.php.
 
 We also need varnishadm to be installed on the server, and the secret files of the servers to be queried if they use authentication.
