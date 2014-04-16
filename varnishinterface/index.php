@@ -12,7 +12,7 @@
 				die( 'No LDAP for php' );
 			}
 
-			$ldap = ldap_connect($auth_ad_server);
+			$ldap = ldap_connect($auth_ad_server) or die("Could not connect to AD server: $auth_ad_server");;
 
 			$username=$_POST['username'];
 			$password=$_POST['password'];
