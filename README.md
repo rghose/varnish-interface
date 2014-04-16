@@ -1,7 +1,7 @@
 This is a varnish interface.
 
-.. figure:: https://raw.githubusercontent.com/rghose/varnish-interface/master/vat_1.png
-    :align: center
+
+![alt tag](https://raw.githubusercontent.com/rghose/varnish-interface/master/vat_1.png)
 
 The config file is needed to be configured in config.php.
 
