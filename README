@@ -1,6 +1,6 @@
 This is a varnish interface.
 
-.. figure:: https://raw.github.com/rghose/varnish-interface/master/
+.. figure:: https://raw.githubusercontent.com/rghose/varnish-interface/master/vat_1.png
     :align: center
 
 The config file is needed to be configured in config.php.
