@@ -1,5 +1,9 @@
 This is a varnish interface.
 
+Requirements:
+
+1. working varnishadm binary. You can copy the varnishadm binary from the varnish servers along with the required so files
+2. sqlite3 installed
 
 ![alt tag](https://raw.githubusercontent.com/rghose/varnish-interface/master/vat_1.png)
 
